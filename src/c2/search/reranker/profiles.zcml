@@ -1,0 +1,32 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="c2.search.reranker"
+    >
+
+  <genericsetup:registerProfile
+      name="default"
+      title="c2.search.reranker: Install"
+      description="Package to configure a new c2.search.reranker site"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="c2.search.reranker: Uninstall"
+      description="Uninstall c2.search.reranker setup."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/uninstall"
+      />
+
+  <!-- Hide Uninstall Profile-->
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="c2.search.reranker"
+      />
+
+
+  <include package=".upgrades" />
+
+</configure>
