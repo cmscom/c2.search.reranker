@@ -1,8 +1,53 @@
 {
-  "name": "plone-addon-classic-dev",
-  "dockerComposeFile": ["../docker-compose.yml"],
+  "name": "Plone (Classic) + Claude Code",
+  "updateRemoteUserUID": false,
+
+  // ★ここが Plone 用：既存の docker-compose を使う
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
   "service": "backend",
   "workspaceFolder": "/workspace",
+  // "overrideCommand": false
+
+  // Claude 側の “便利要素”
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+
+  // ログインや設定の永続化（Claude の再ログイン地獄を避ける）
+  "mounts": [
+    "source=claude-config-${devcontainerId},target=/root/.claude,type=volume",
+    "source=claude-dotconfig-${devcontainerId},target=/root/.config,type=volume",
+    "source=zsh-history-${devcontainerId},target=/commandhistory,type=volume"
+  ],
+
+  // .claude.jsonを.claudeディレクトリ内でシンボリックリンクとして管理
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/root/.claude"
+  },
+
+  // VS Code 拡張（Claude Code 拡張を入れる）
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        }
+      },
+      "extensions": [
+        "anthropic.claude-code"
+      ]
+    }
+  },
+
+  // 便利：必要ならポート転送（Plone 8080）
   "forwardPorts": [8080],
-  "overrideCommand": false
+
+  // 最低限：コンテナ作成後に .claude の所有権が root になる事故の対策
+  // .claude.jsonを永続化ボリューム内で管理
+  "postCreateCommand": "mkdir -p ~/.claude ~/.config/claude-code && if [ -f ~/.claude.json ] && [ ! -L ~/.claude.json ]; then mv ~/.claude.json ~/.claude/.global.json && ln -s ~/.claude/.global.json ~/.claude.json; elif [ ! -e ~/.claude.json ] && [ -f ~/.claude/.global.json ]; then ln -s ~/.claude/.global.json ~/.claude.json; fi && chown -R $USER:$USER ~/.claude ~/.config || true"
 }
