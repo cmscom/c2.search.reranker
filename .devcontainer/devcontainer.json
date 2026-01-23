@@ -1,0 +1,8 @@
+{
+  "name": "plone-addon-classic-dev",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "backend",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [8080],
+  "overrideCommand": false
+}

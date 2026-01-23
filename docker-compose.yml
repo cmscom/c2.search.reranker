@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SITE: "Plone"
+      TYPE: "classic"
+      DEVELOP: "/workspace"
+      PROFILES: "c2.search.reranker:default"
+      # 開発で作り直したいときだけ（普段は外す）
+      # DELETE_EXISTING: "true"
+    volumes:
+      - .:/workspace:cached
+      - data:/data
+    # command: ["start"]
+    command: ["sleep", "infinity"]
+
+volumes:
+  data: {}
