@@ -8,6 +8,8 @@
   ],
   "service": "backend",
   "workspaceFolder": "/workspace",
+  "remoteUser": "root",
+  "containerUser": "root",
   // "overrideCommand": false
 
   // Claude 側の “便利要素”

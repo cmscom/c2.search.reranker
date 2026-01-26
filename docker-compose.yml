@@ -17,16 +17,9 @@ services:
     volumes:
       - .:/workspace:cached
       - data:/data
-    # rootユーザーで起動し、/workspaceのパーミッション修正後にploneユーザーで作業
     user: root
-    entrypoint:
-      - /bin/bash
-      - -c
-      - |
-        chown -R plone:plone /workspace
-        exec gosu plone /bin/bash -c "sleep infinity"
+    command: ["sleep", "infinity"]
     # command: ["start"]
-    # entrypoint: ["/bin/bash", "-c", "sleep infinity"]
 
 volumes:
   data: {}
