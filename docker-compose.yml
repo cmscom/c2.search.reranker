@@ -17,8 +17,9 @@ services:
     volumes:
       - .:/workspace:cached
       - data:/data
-    # command: ["start"]
+    user: root
     command: ["sleep", "infinity"]
+    # command: ["start"]
 
 volumes:
   data: {}
