@@ -120,6 +120,14 @@ devcontainer内では、パッケージは既に `/workspace` にマウントさ
 - **テスト**: pytest
 - **ビルド**: hatchling
 
+## 多言語対応 (i18n)
+
+- メッセージは英語で記述し、i18n対応の準備をする
+- 対応言語: 英語 (en)、日本語 (ja)
+- MessageFactory: `_` (`c2.search.reranker` ドメイン)
+- ロケールディレクトリ: `src/c2/search/reranker/locales/`
+- POTファイル再生成: `python -m c2.search.reranker.locales`（i18ndudeが必要）
+
 ## 参考情報
 
 - devcontainer設定ファイル: [.devcontainer/devcontainer.json](/.devcontainer/devcontainer.json)

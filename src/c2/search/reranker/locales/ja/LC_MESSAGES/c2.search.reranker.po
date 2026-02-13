@@ -1,0 +1,151 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: c2.search.reranker\n"
+"POT-Creation-Date: 2022-05-25 17:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: ja\n"
+"Language-Name: Japanese\n"
+"Preferred-Encodings: utf-8\n"
+"Domain: c2.search.reranker\n"
+
+#. Default: "Search Reranker Settings"
+msgid "label_reranker_settings"
+msgstr "検索リランカー設定"
+
+#. Default: "Configure search result reranking, including vector search integration and content type group boosting."
+msgid "help_reranker_settings"
+msgstr "ベクトル検索との統合やコンテンツタイプグループのブースト設定を含む、検索結果のリランキングを設定します。"
+
+#. Default: "Enable vector search"
+msgid "label_vector_search_enabled"
+msgstr "ベクトル検索を有効にする"
+
+#. Default: "If selected, vector search (provided by collective.vectorsearch) will be used in combination with keyword search. Requires collective.vectorsearch to be installed."
+msgid "help_vector_search_enabled"
+msgstr "選択すると、ベクトル検索（collective.vectorsearchが提供）がキーワード検索と組み合わせて使用されます。collective.vectorsearchのインストールが必要です。"
+
+#. Default: "Keyword search ratio (%)"
+msgid "label_keyword_search_ratio"
+msgstr "キーワード検索の比率 (%)"
+
+#. Default: "The percentage of weight given to keyword search results (0-100). The remaining percentage is given to vector search. For example, 70 means 70% keyword search and 30% vector search. Only effective when vector search is enabled."
+msgid "help_keyword_search_ratio"
+msgstr "キーワード検索結果に与える重みの割合（0-100）。残りの割合がベクトル検索に与えられます。例えば、70はキーワード検索70%、ベクトル検索30%を意味します。ベクトル検索が有効な場合のみ機能します。"
+
+#. Default: "General Pages"
+msgid "label_group_general"
+msgstr "一般ページ"
+
+#. Default: "Content types"
+msgid "label_group_general_content_types"
+msgstr "コンテンツタイプ"
+
+#. Default: "Select the content types for the General Pages group."
+msgid "help_group_general_content_types"
+msgstr "一般ページグループのコンテンツタイプを選択してください。"
+
+#. Default: "Boost rate"
+msgid "label_group_general_boost"
+msgstr "ブースト率"
+
+#. Default: "The boost multiplier for search results in this group. Values greater than 1.0 increase relevance, values less than 1.0 decrease it."
+msgid "help_group_general_boost"
+msgstr "このグループの検索結果に対するブースト倍率。1.0より大きい値は関連性を上げ、1.0より小さい値は下げます。"
+
+#. Default: "Half-life (days)"
+msgid "label_group_general_halflife"
+msgstr "半減期（日数）"
+
+#. Default: "The number of days after which the time-decay boost is halved. A higher value means content stays relevant longer."
+msgid "help_group_general_halflife"
+msgstr "時間減衰ブーストが半分になるまでの日数。値が大きいほど、コンテンツの関連性が長く維持されます。"
+
+#. Default: "Announcements"
+msgid "label_group_announcements"
+msgstr "お知らせ"
+
+#. Default: "Content types"
+msgid "label_group_announcements_content_types"
+msgstr "コンテンツタイプ"
+
+#. Default: "Select the content types for the Announcements group."
+msgid "help_group_announcements_content_types"
+msgstr "お知らせグループのコンテンツタイプを選択してください。"
+
+#. Default: "Boost rate"
+msgid "label_group_announcements_boost"
+msgstr "ブースト率"
+
+#. Default: "The boost multiplier for search results in this group. Values greater than 1.0 increase relevance, values less than 1.0 decrease it."
+msgid "help_group_announcements_boost"
+msgstr "このグループの検索結果に対するブースト倍率。1.0より大きい値は関連性を上げ、1.0より小さい値は下げます。"
+
+#. Default: "Half-life (days)"
+msgid "label_group_announcements_halflife"
+msgstr "半減期（日数）"
+
+#. Default: "The number of days after which the time-decay boost is halved. A higher value means content stays relevant longer."
+msgid "help_group_announcements_halflife"
+msgstr "時間減衰ブーストが半分になるまでの日数。値が大きいほど、コンテンツの関連性が長く維持されます。"
+
+#. Default: "Knowledge"
+msgid "label_group_knowledge"
+msgstr "ナレッジ"
+
+#. Default: "Content types"
+msgid "label_group_knowledge_content_types"
+msgstr "コンテンツタイプ"
+
+#. Default: "Select the content types for the Knowledge group."
+msgid "help_group_knowledge_content_types"
+msgstr "ナレッジグループのコンテンツタイプを選択してください。"
+
+#. Default: "Boost rate"
+msgid "label_group_knowledge_boost"
+msgstr "ブースト率"
+
+#. Default: "The boost multiplier for search results in this group. Values greater than 1.0 increase relevance, values less than 1.0 decrease it."
+msgid "help_group_knowledge_boost"
+msgstr "このグループの検索結果に対するブースト倍率。1.0より大きい値は関連性を上げ、1.0より小さい値は下げます。"
+
+#. Default: "Half-life (days)"
+msgid "label_group_knowledge_halflife"
+msgstr "半減期（日数）"
+
+#. Default: "The number of days after which the time-decay boost is halved. A higher value means content stays relevant longer."
+msgid "help_group_knowledge_halflife"
+msgstr "時間減衰ブーストが半分になるまでの日数。値が大きいほど、コンテンツの関連性が長く維持されます。"
+
+#. Default: "Other"
+msgid "label_group_other"
+msgstr "その他"
+
+#. Default: "Content types"
+msgid "label_group_other_content_types"
+msgstr "コンテンツタイプ"
+
+#. Default: "Select the content types for the Other group."
+msgid "help_group_other_content_types"
+msgstr "その他グループのコンテンツタイプを選択してください。"
+
+#. Default: "Boost rate"
+msgid "label_group_other_boost"
+msgstr "ブースト率"
+
+#. Default: "The boost multiplier for search results in this group. Values greater than 1.0 increase relevance, values less than 1.0 decrease it."
+msgid "help_group_other_boost"
+msgstr "このグループの検索結果に対するブースト倍率。1.0より大きい値は関連性を上げ、1.0より小さい値は下げます。"
+
+#. Default: "Half-life (days)"
+msgid "label_group_other_halflife"
+msgstr "半減期（日数）"
+
+#. Default: "The number of days after which the time-decay boost is halved. A higher value means content stays relevant longer."
+msgid "help_group_other_halflife"
+msgstr "時間減衰ブーストが半分になるまでの日数。値が大きいほど、コンテンツの関連性が長く維持されます。"

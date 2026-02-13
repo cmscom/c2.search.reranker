@@ -3,6 +3,21 @@
           i18n:domain="c2.search.reranker"
 >
 
-  <!-- -*- extra stuff goes here -*- -->
+  <records interface="c2.search.reranker.interfaces.IRerankerSettings">
+    <value key="vector_search_enabled">False</value>
+    <value key="keyword_search_ratio">50</value>
+    <value key="group_general_content_types" />
+    <value key="group_general_boost">1.0</value>
+    <value key="group_general_halflife">60</value>
+    <value key="group_announcements_content_types" />
+    <value key="group_announcements_boost">1.0</value>
+    <value key="group_announcements_halflife">60</value>
+    <value key="group_knowledge_content_types" />
+    <value key="group_knowledge_boost">1.0</value>
+    <value key="group_knowledge_halflife">60</value>
+    <value key="group_other_content_types" />
+    <value key="group_other_boost">1.0</value>
+    <value key="group_other_halflife">60</value>
+  </records>
 
 </registry>

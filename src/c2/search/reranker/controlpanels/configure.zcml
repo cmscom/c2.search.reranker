@@ -5,6 +5,16 @@
     i18n_domain="c2.search.reranker"
     >
 
-  <!-- -*- extra stuff goes here -*- -->
+  <browser:page
+      name="reranker-controlpanel"
+      for="plone.base.interfaces.IPloneSiteRoot"
+      class=".RerankerSettingsControlPanel"
+      permission="cmf.ManagePortal"
+      />
+
+  <adapter
+      factory=".restapi.RerankerControlPanel"
+      name="reranker"
+      />
 
 </configure>
