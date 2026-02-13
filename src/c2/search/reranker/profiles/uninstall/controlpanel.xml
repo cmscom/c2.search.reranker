@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        name="portal_controlpanel"
+>
+
+  <configlet action_id="reranker"
+             remove="True"
+  />
+
+</object>

@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         name="portal_controlpanel"
+        purge="False"
+        i18n:domain="c2.search.reranker"
 >
 
-  <!-- -*- extra stuff goes here -*- -->
+  <configlet action_id="reranker"
+             appId="c2.search.reranker"
+             category="Products"
+             condition_expr=""
+             icon_expr="string:gear"
+             title="Search Reranker Settings"
+             url_expr="string:${portal_url}/@@reranker-controlpanel"
+             visible="True"
+             i18n:attributes="title"
+  >
+    <permission>Manage portal</permission>
+  </configlet>
 
 </object>
