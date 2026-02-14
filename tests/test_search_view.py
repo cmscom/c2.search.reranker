@@ -69,9 +69,7 @@ class TestRerankerSearchView:
             id="test-score-doc",
             title="Reranker Score Test Beta",
         )
-        self.portal.portal_catalog.reindexObject(
-            self.portal["test-score-doc"]
-        )
+        self.portal.portal_catalog.reindexObject(self.portal["test-score-doc"])
 
         self.request.form["SearchableText"] = "Beta"
         view = api.content.get_view(

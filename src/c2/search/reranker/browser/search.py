@@ -44,26 +44,20 @@ class RerankerSearchView(BrowserView):
         results = []
         for rank, (brain, scores) in enumerate(ranked, start=1):
             modified = getattr(brain, "modified", None)
-            modified_str = (
-                modified.strftime("%Y-%m-%d %H:%M") if modified else "-"
-            )
-            age_days = (
-                float(now - modified) if modified else 0.0
-            )
+            modified_str = modified.strftime("%Y-%m-%d %H:%M") if modified else "-"
+            age_days = float(now - modified) if modified else 0.0
 
-            results.append(
-                {
-                    "rank": rank,
-                    "title": brain.Title or "(no title)",
-                    "url": brain.getURL(),
-                    "portal_type": brain.portal_type,
-                    "modified": modified_str,
-                    "age_days": f"{age_days:.1f}",
-                    "original_score": f"{scores['original_score']:.4f}",
-                    "boost": f"{scores['boost']:.2f}",
-                    "decay": f"{scores['decay']:.4f}",
-                    "final_score": f"{scores['final_score']:.4f}",
-                }
-            )
+            results.append({
+                "rank": rank,
+                "title": brain.Title or "(no title)",
+                "url": brain.getURL(),
+                "portal_type": brain.portal_type,
+                "modified": modified_str,
+                "age_days": f"{age_days:.1f}",
+                "original_score": f"{scores['original_score']:.4f}",
+                "boost": f"{scores['boost']:.2f}",
+                "decay": f"{scores['decay']:.4f}",
+                "final_score": f"{scores['final_score']:.4f}",
+            })
 
         return results

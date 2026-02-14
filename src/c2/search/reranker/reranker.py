@@ -51,9 +51,7 @@ class RerankerSettings:
                 or DEFAULT_BOOST
             )
             halflife = (
-                getattr(
-                    self._settings, f"group_{group_name}_halflife", None
-                )
+                getattr(self._settings, f"group_{group_name}_halflife", None)
                 or DEFAULT_HALFLIFE
             )
             for ct in content_types:
@@ -148,9 +146,7 @@ def rerank_brains(brains, now=None):
         portal_type = brain.portal_type
 
         # Original relevance score from ZCTextIndex
-        original_score = getattr(
-            brain, "data_record_normalized_score_", None
-        )
+        original_score = getattr(brain, "data_record_normalized_score_", None)
         if original_score is None or original_score == 0:
             original_score = 1.0
         else:

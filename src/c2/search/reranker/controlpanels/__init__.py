@@ -20,9 +20,7 @@ class RerankerSettingsEditForm(controlpanel.RegistryEditForm):
 
     def updateFields(self):
         super().updateFields()
-        self.fields["vector_search_enabled"].widgetFactory = (
-            SingleCheckBoxFieldWidget
-        )
+        self.fields["vector_search_enabled"].widgetFactory = SingleCheckBoxFieldWidget
 
 
 class RerankerSettingsControlPanel(controlpanel.ControlPanelFormWrapper):
