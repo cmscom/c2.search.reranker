@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="c2.search.reranker"
+    >
+
+  <browser:page
+      name="reranker-search"
+      for="plone.base.interfaces.IPloneSiteRoot"
+      class=".search.RerankerSearchView"
+      template="templates/reranker_search.pt"
+      permission="cmf.ManagePortal"
+      />
+
+</configure>
