@@ -35,7 +35,7 @@ jobs:
     uses: plone/meta/.github/workflows/backend-pytest.yml@2.x
     strategy:
       matrix:
-        python-version: ['3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
         plone-version: ['6.1-latest']
     with:
       python-version: ${{ matrix.python-version }}
