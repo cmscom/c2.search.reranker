@@ -2,6 +2,5 @@
 
   <!-- List all packages you depend here -->
   <include package="plone.restapi" />
-  <include package="plone.volto" />
 
 </configure>
