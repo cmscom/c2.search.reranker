@@ -54,9 +54,7 @@ requirements-mxdev.txt: pyproject.toml mx.ini ## Generate constraints file
 
 $(VENV_FOLDER): requirements-mxdev.txt ## Install dependencies
 	@echo "$(GREEN)==> Install environment$(RESET)"
-ifdef CI
-	@uv venv $(VENV_FOLDER)
-else
+ifndef CI
 	@uv venv --python=3.10 $(VENV_FOLDER)
 endif
 	@uv pip install -r requirements-mxdev.txt

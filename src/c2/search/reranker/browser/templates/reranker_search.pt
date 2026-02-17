@@ -1,0 +1,102 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="context/main_template/macros/master"
+>
+  <body>
+
+    <metal:main fill-slot="content-core">
+
+      <h1>Reranker Search (Test Page)</h1>
+
+      <form action=""
+            method="GET"
+            tal:attributes="
+              action string:${context/absolute_url}/@@reranker-search;
+            "
+      >
+        <label for="SearchableText">Search:</label>
+        <input id="SearchableText"
+               name="SearchableText"
+               size="40"
+               type="text"
+               tal:attributes="
+                 value view/search_text;
+               "
+        />
+        <input type="submit"
+               value="Search"
+        />
+      </form>
+
+      <div style="color: red; margin: 1em 0;"
+           tal:condition="view/error"
+      >
+        <strong>Error:</strong>
+        <span tal:content="view/error"></span>
+      </div>
+
+      <div style="margin: 1em 0;"
+           tal:condition="python: view.search_text and not view.results and not view.error"
+      >
+        <p>No results found.</p>
+      </div>
+
+      <div tal:condition="view/results">
+        <p>
+          <strong tal:content="python: len(view.results)"></strong>
+           results
+          for "<span tal:content="view/search_text"></span>"
+        </p>
+
+        <table class="listing"
+               style="width: 100%; border-collapse: collapse;"
+        >
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Modified</th>
+              <th>Age (days)</th>
+              <th>Original Score</th>
+              <th>Boost</th>
+              <th>Decay</th>
+              <th>Final Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr tal:repeat="item view/results">
+              <td tal:content="item/rank"></td>
+              <td>
+                <a tal:content="item/title"
+                   tal:attributes="
+                     href item/url;
+                   "
+                ></a>
+              </td>
+              <td tal:content="item/portal_type"></td>
+              <td tal:content="item/modified"></td>
+              <td style="text-align: right;"
+                  tal:content="item/age_days"
+              ></td>
+              <td style="text-align: right;"
+                  tal:content="item/original_score"
+              ></td>
+              <td style="text-align: right;"
+                  tal:content="item/boost"
+              ></td>
+              <td style="text-align: right;"
+                  tal:content="item/decay"
+              ></td>
+              <td style="text-align: right;"
+                  tal:content="item/final_score"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </metal:main>
+
+  </body>
+</html>

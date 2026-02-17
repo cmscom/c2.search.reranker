@@ -14,12 +14,10 @@
 
   <include file="dependencies.zcml" />
   <include file="profiles.zcml" />
-  <include file="permissions.zcml" />
 
+  <include package=".browser" />
   <include package=".controlpanels" />
-  <include package=".indexers" />
   <include package=".serializers" />
-  <include package=".vocabularies" />
 
   <!-- -*- extra stuff goes here -*- -->
 
