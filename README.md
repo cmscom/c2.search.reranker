@@ -1,10 +1,53 @@
 # c2.search.reranker
 
-A new addon for Plone
+A Plone addon that reranks search results using content type boost weighting and half-life time decay.
+
+[Japanese / 日本語](README-ja.md)
 
 ## Features
 
-TODO: List our awesome features
+### Content Type Boost Weighting
+
+Assign content types to groups (General Pages, Announcements, Knowledge, Other) and configure a boost multiplier for each group. Content types with a higher boost value appear higher in search results.
+
+### Half-life Time Decay
+
+Each group has a configurable half-life (in days). Older content gradually loses relevance based on an exponential decay formula:
+
+```
+decay = 0.5 ^ (age_in_days / halflife_days)
+```
+
+### Combined Scoring
+
+The final score is calculated as:
+
+```
+final_score = original_score * boost * decay
+```
+
+Where `original_score` is the relevance score from ZCTextIndex.
+
+### Control Panel
+
+All settings are configurable through the Plone control panel (Site Setup > Search Reranker Settings) and the REST API (`@controlpanels/reranker`).
+
+### Vector Search Integration (Planned)
+
+The control panel includes settings for optional vector search integration via `collective.vectorsearch`, with a configurable keyword/vector search ratio. This feature is planned for a future release.
+
+### Browser View for Testing
+
+A test view is available at `@@reranker-search?SearchableText=keyword` that displays reranked results with detailed score breakdowns (original score, boost, decay, final score).
+
+### REST API Summary Serializer
+
+Extends plone.restapi listing responses with additional metadata fields: `image_field`, `image_scales`, `effective`, and `Subject`.
+
+## Requirements
+
+- Python 3.10 - 3.13
+- Plone 6.0 or 6.1
 
 ## Installation
 
@@ -14,73 +57,46 @@ Install c2.search.reranker with `pip`:
 pip install c2.search.reranker
 ```
 
-And to create the Plone site:
+Then install the addon from **Site Setup > Add-ons** in your Plone site.
+
+## Development
+
+### Prerequisites
+
+- [uv](https://docs.astral.sh/uv/)
+- [Make](https://www.gnu.org/software/make/)
+- [Git](https://git-scm.com/)
+
+### Setup
 
 ```shell
-make create-site
+git clone git@github.com:terapyon/c2.search.reranker.git
+cd c2.search.reranker
+make install
 ```
+
+### Common Commands
+
+```shell
+make test           # Run tests
+make format         # Format code
+make lint           # Run linter checks
+make i18n           # Update locale files
+make start          # Start Plone instance on localhost:8080
+make create-site    # Create a new Plone site
+```
+
+### Tools
+
+- **Linter / Formatter**: [ruff](https://docs.astral.sh/ruff/)
+- **Tests**: [pytest](https://docs.pytest.org/)
+- **Build**: [hatchling](https://hatch.pypa.io/)
 
 ## Contribute
 
 - [Issue tracker](https://github.com/terapyon/c2.search.reranker/issues)
 - [Source code](https://github.com/terapyon/c2.search.reranker/)
 
-### Prerequisites ✅
-
--   An [operating system](https://6.docs.plone.org/install/create-project-cookieplone.html#prerequisites-for-installation) that runs all the requirements mentioned.
--   [uv](https://6.docs.plone.org/install/create-project-cookieplone.html#uv)
--   [Make](https://6.docs.plone.org/install/create-project-cookieplone.html#make)
--   [Git](https://6.docs.plone.org/install/create-project-cookieplone.html#git)
--   [Docker](https://docs.docker.com/get-started/get-docker/) (optional)
-
-### Installation 🔧
-
-1.  Clone this repository, then change your working directory.
-
-    ```shell
-    git clone git@github.com:terapyon/c2.search.reranker.git
-    cd c2.search.reranker
-    ```
-
-2.  Install this code base.
-
-    ```shell
-    make install
-    ```
-
-
-### Add features using `plonecli` or `bobtemplates.plone`
-
-This package provides markers as strings (`<!-- extra stuff goes here -->`) that are compatible with [`plonecli`](https://github.com/plone/plonecli) and [`bobtemplates.plone`](https://github.com/plone/bobtemplates.plone).
-These markers act as hooks to add all kinds of subtemplates, including behaviors, control panels, upgrade steps, or other subtemplates from `plonecli`.
-
-To run `plonecli` with configuration to target this package, run the following command.
-
-```shell
-make add <template_name>
-```
-
-For example, you can add a content type to your package with the following command.
-
-```shell
-make add content_type
-```
-
-You can add a behavior with the following command.
-
-```shell
-make add behavior
-```
-
-```{seealso}
-You can check the list of available subtemplates in the [`bobtemplates.plone` `README.md` file](https://github.com/plone/bobtemplates.plone/?tab=readme-ov-file#provided-subtemplates).
-See also the documentation of [Mockup and Patternslib](https://6.docs.plone.org/classic-ui/mockup.html) for how to build the UI toolkit for Classic UI.
-```
-
 ## License
 
-The project is licensed under GPLv2.
-
-## Credits and acknowledgements 🙏
-
-Generated using [Cookieplone (0.9.10)](https://github.com/plone/cookieplone) and [cookieplone-templates (dd13073)](https://github.com/plone/cookieplone-templates/commit/dd13073d34447056d6992461d8da29447d62c029) on 2026-01-23 07:51:01.563235. A special thanks to all contributors and supporters!
+This project is licensed under the [GPL-2.0-only](https://spdx.org/licenses/GPL-2.0-only.html).

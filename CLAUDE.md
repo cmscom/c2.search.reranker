@@ -39,18 +39,17 @@
 src/c2/search/reranker/
 ├── __init__.py           # バージョン情報とロガー設定
 ├── configure.zcml        # ZCML設定
-├── content/              # コンテンツタイプ
+├── browser/              # ブラウザビュー
 ├── controlpanels/        # コントロールパネル
-├── indexers/             # カスタムインデクサー
 ├── interfaces.py         # インターフェース定義
 ├── locales/              # 多言語対応
 ├── profiles/             # GenericSetupプロファイル
+├── reranker.py           # リランカーロジック
 ├── serializers/          # REST APIシリアライザー
 │   └── summary.py
 ├── setuphandlers/        # セットアップハンドラー
 ├── testing.py            # テスト用の設定
-├── upgrades/             # アップグレードステップ
-└── vocabularies/         # ボキャブラリー
+└── upgrades/             # アップグレードステップ
 ```
 
 ### ビルドシステム
