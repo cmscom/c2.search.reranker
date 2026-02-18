@@ -39,6 +39,9 @@ test = [
     "pytest-cov",
     "pytest-plone>=0.5.0",
 ]
+vector = [
+    "collective.vectorsearch",
+]
 release = [
     "zest.releaser[recommended]",
     "zestreleaser.towncrier",
