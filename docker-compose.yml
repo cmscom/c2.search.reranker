@@ -17,9 +17,11 @@ services:
     volumes:
       - .:/workspace:cached
       - data:/data
+      - pip-cache:/root/.cache/pip
     user: root
     command: ["sleep", "infinity"]
     # command: ["start"]
 
 volumes:
   data: {}
+  pip-cache: {}

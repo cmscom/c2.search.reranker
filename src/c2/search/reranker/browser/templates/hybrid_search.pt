@@ -1,0 +1,213 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:use-macro="context/main_template/macros/master"
+>
+  <body>
+
+    <metal:main fill-slot="content-core">
+
+      <h1>Hybrid Search (Test Page)</h1>
+
+      <form action=""
+            method="GET"
+            tal:attributes="action string:${context/absolute_url}/@@hybrid-search"
+      >
+        <label for="SearchableText">Search:</label>
+        <input id="SearchableText"
+               name="SearchableText"
+               size="40"
+               type="text"
+               tal:attributes="value view/search_text"
+        />
+
+        <label for="scoring_mode">Scoring:</label>
+        <select id="scoring_mode" name="scoring_mode">
+          <option value="rrf"
+                  tal:attributes="selected python:'selected' if view.scoring_mode == 'rrf' else None"
+          >RRF (Rank Fusion)</option>
+          <option value="score"
+                  tal:attributes="selected python:'selected' if view.scoring_mode == 'score' else None"
+          >Score (Weighted)</option>
+        </select>
+
+        <input type="submit"
+               value="Search"
+        />
+      </form>
+
+      <fieldset>
+        <legend>Search Settings</legend>
+        <ul>
+          <li>Scoring mode:
+            <strong tal:content="python:'RRF (Reciprocal Rank Fusion)' if view.scoring_mode == 'rrf' else 'Score (Weighted Average)'"></strong>
+          </li>
+          <li>Vector search enabled:
+            <strong tal:content="python:'Yes' if view.vector_enabled else 'No'"></strong>
+          </li>
+          <li>Configured keyword ratio:
+            <strong tal:content="view/keyword_ratio"></strong>%
+          </li>
+          <li>Effective ratio:
+            <strong tal:content="view/effective_keyword_ratio"></strong>% keyword
+            / <strong tal:content="view/effective_vector_ratio"></strong>% vector
+          </li>
+          <li tal:condition="view/vector_index_name">
+            Vector index:
+            <strong tal:content="view/vector_index_name"></strong>
+          </li>
+        </ul>
+      </fieldset>
+
+      <div class="portalMessage informationMessage"
+           tal:condition="view/vector_message"
+      >
+        <strong>Note:</strong>
+        <span tal:content="view/vector_message"></span>
+      </div>
+
+      <div class="portalMessage error"
+           tal:condition="view/error"
+      >
+        <strong>Error:</strong>
+        <span tal:content="view/error"></span>
+      </div>
+
+      <p tal:condition="python:view.search_text and not view.results and not view.error">
+        No results found.
+      </p>
+
+      <div tal:condition="view/results">
+        <p>
+          <strong tal:content="python:len(view.results)"></strong>
+           results
+          for "<span tal:content="view/search_text"></span>"
+        </p>
+
+        <!-- RRF mode table -->
+        <table class="listing"
+               style="width:100%"
+               tal:condition="python:view.scoring_mode == 'rrf'"
+        >
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Source</th>
+              <th>Keyword RRF</th>
+              <th>Vector RRF</th>
+              <th>Combined RRF</th>
+              <th>Boost</th>
+              <th>Decay</th>
+              <th>Final Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr tal:repeat="item view/results">
+              <td tal:content="item/rank"></td>
+              <td>
+                <a tal:content="item/title"
+                   tal:attributes="href item/url"
+                ></a>
+              </td>
+              <td tal:content="item/portal_type"></td>
+              <td>
+                <strong tal:condition="python:item['source']=='both'"
+                        tal:content="item/source"></strong>
+                <em tal:condition="python:item['source']=='vector'"
+                    tal:content="item/source"></em>
+                <span tal:condition="python:item['source']=='keyword'"
+                      tal:content="item/source"></span>
+              </td>
+              <td style="text-align:right"
+                  tal:content="python:item.get('keyword_rrf', '-')"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="python:item.get('vector_rrf', '-')"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/combined_score"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/boost"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/decay"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/final_score"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Score mode table -->
+        <table class="listing"
+               style="width:100%"
+               tal:condition="python:view.scoring_mode == 'score'"
+        >
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Source</th>
+              <th>Keyword Score</th>
+              <th>Vector Score</th>
+              <th>Combined Score</th>
+              <th>Boost</th>
+              <th>Decay</th>
+              <th>Final Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr tal:repeat="item view/results">
+              <td tal:content="item/rank"></td>
+              <td>
+                <a tal:content="item/title"
+                   tal:attributes="href item/url"
+                ></a>
+              </td>
+              <td tal:content="item/portal_type"></td>
+              <td>
+                <strong tal:condition="python:item['source']=='both'"
+                        tal:content="item/source"></strong>
+                <em tal:condition="python:item['source']=='vector'"
+                    tal:content="item/source"></em>
+                <span tal:condition="python:item['source']=='keyword'"
+                      tal:content="item/source"></span>
+              </td>
+              <td style="text-align:right"
+                  tal:content="item/keyword_score"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/vector_score"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/combined_score"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/boost"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/decay"
+              ></td>
+              <td style="text-align:right"
+                  tal:content="item/final_score"
+              ></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>
+          <strong>Legend:</strong>
+          <strong>both</strong> = found by both |
+          <em>vector</em> = vector only |
+          keyword = keyword only
+        </p>
+      </div>
+
+    </metal:main>
+
+  </body>
+</html>
