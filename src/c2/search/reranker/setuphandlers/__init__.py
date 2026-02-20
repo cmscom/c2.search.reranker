@@ -1,4 +1,7 @@
-from plone.base.interfaces.installable import INonInstallable
+try:
+    from plone.base.interfaces.installable import INonInstallable
+except ImportError:
+    from Products.CMFPlone.interfaces import INonInstallable
 from zope.interface import implementer
 
 

@@ -7,7 +7,7 @@
 
   <browser:page
       name="reranker-controlpanel"
-      for="plone.base.interfaces.IPloneSiteRoot"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       class=".RerankerSettingsControlPanel"
       permission="cmf.ManagePortal"
       />
