@@ -6,6 +6,7 @@ except ImportError:
     class IJSONSummarySerializerMetadata(Interface):
         """Fallback for older plone.restapi without this interface."""
 
+
 from zope.interface import implementer
 
 
