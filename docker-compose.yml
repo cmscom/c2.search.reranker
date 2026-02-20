@@ -10,16 +10,18 @@ services:
     environment:
       SITE: "Plone"
       TYPE: "classic"
-      DEVELOP: "/workspace"
+      DEVELOP: "/workspace /workspace/packages/collective.vectorsearch"
       PROFILES: "c2.search.reranker:default"
       # 開発で作り直したいときだけ（普段は外す）
       # DELETE_EXISTING: "true"
     volumes:
       - .:/workspace:cached
       - data:/data
+      - pip-cache:/root/.cache/pip
     user: root
     command: ["sleep", "infinity"]
     # command: ["start"]
 
 volumes:
   data: {}
+  pip-cache: {}

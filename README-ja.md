@@ -18,31 +18,82 @@
 decay = 0.5 ^ (経過日数 / 半減期日数)
 ```
 
-### 複合スコアリング
+### ベクトル検索連携（オプション）
 
-最終スコアは以下の式で計算されます：
-
-```
-final_score = original_score * boost * decay
-```
-
-`original_score` はZCTextIndexからの関連性スコアです。
+`collective.vectorsearch` がインストールされている場合、キーワード検索とベクトル検索（意味的類似性）を組み合わせることができます。キーワード／ベクトルの比率は設定可能です（例：キーワード50% / ベクトル50%）。
 
 ### コントロールパネル
 
 すべての設定はPloneコントロールパネル（サイト設定 > Search Reranker Settings）およびREST API（`@controlpanels/reranker`）から変更できます。
 
-### ベクトル検索連携（計画中）
-
-コントロールパネルには `collective.vectorsearch` によるベクトル検索連携の設定が含まれています。キーワード検索とベクトル検索の比率を設定可能です。この機能は将来のリリースで実装予定です。
-
 ### テスト用ブラウザビュー
 
-`@@reranker-search?SearchableText=keyword` でアクセスできるテストビューがあります。リランキング結果をスコアの詳細（元スコア、ブースト、減衰、最終スコア）とともに表示します。
+検索結果のデバッグと比較のためのテストビューが2つあります：
+
+- `@@reranker-search?SearchableText=keyword` — キーワードのみのリランキング（スコア詳細付き）
+- `@@hybrid-search?SearchableText=keyword` — ハイブリッド検索（キーワード＋ベクトル、全スコア内訳付き）
 
 ### REST API サマリーシリアライザー
 
 plone.restapi のリスティングレスポンスに追加のメタデータフィールド（`image_field`、`image_scales`、`effective`、`Subject`）を付与します。
+
+## スコアリングアルゴリズム
+
+このアドオンは3つのスコアリングパターンを提供します。すべてのパターンで、**ブースト**と**時間減衰**は基本の関連性スコアが計算された後の最終ステップで適用されます。
+
+### パターン1：キーワードのみ（ベクトル検索なし）
+
+ベクトル検索が無効、または `collective.vectorsearch` が未インストールの場合：
+
+```
+final_score = original_score * boost * decay
+```
+
+- `original_score`: ZCTextIndexからの関連性スコア（`data_record_normalized_score_`）
+- `boost`: コンテンツタイプグループの係数（グループごとに設定可能、デフォルト1.0）
+- `decay`: 時間減衰係数 `0.5 ^ (経過日数 / 半減期日数)`（グループごとに設定可能、デフォルト半減期60日）
+
+### パターン2：ハイブリッド — Scoreモード（加重平均）
+
+正規化されたスコアを使ってキーワード検索とベクトル検索を結合します：
+
+```
+keyword_score  = 正規化されたZCTextIndexスコア (0.0 - 1.0)
+vector_score   = VectorIndexのコサイン類似度 (0.0 - 1.0)
+combined_score = keyword_score * keyword_weight + vector_score * vector_weight
+final_score    = combined_score * boost * decay
+```
+
+- キーワードスコアは結果セット内の最大値で割って正規化
+- `keyword_weight = keyword_search_ratio / 100`（設定可能、デフォルト50%）
+- `vector_weight = 1.0 - keyword_weight`
+- 片方の検索メソッドでのみ見つかった結果は、もう一方のスコアが0.0になる
+
+### パターン3：ハイブリッド — RRFモード（Reciprocal Rank Fusion）[デフォルト]
+
+生のスコアではなく順位を使ってキーワード検索とベクトル検索を結合します。2つの検索手法間のスコアスケールの違いに影響されない堅牢な手法です。
+
+```
+keyword_rrf    = 1 / (k + keyword_rank)
+vector_rrf     = 1 / (k + vector_rank)
+combined_score = keyword_rrf * keyword_weight + vector_rrf * vector_weight
+final_score    = combined_score * boost * decay
+```
+
+- `k = 60`（上位ランクの項目が支配的になりすぎるのを防ぐ定数）
+- 各結果セットを独自のスコアでソートして順位を割り当て（1 = 最上位）
+- 片方の検索でのみ見つかった結果は、もう一方のRRFが0.0になる
+- `keyword_weight` と `vector_weight` はScoreモードと同じ
+
+### スコアリングパイプラインの概要
+
+```
+ステップ1: キーワード検索を実行（常時）
+ステップ2: ベクトル検索を実行（有効かつ利用可能な場合）
+ステップ3: スコアを結合（ScoreモードまたはRRFモード）
+ステップ4: boost * decay を適用して final_score を算出
+ステップ5: final_score の降順でソート
+```
 
 ## 動作要件
 

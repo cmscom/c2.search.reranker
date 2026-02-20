@@ -5,6 +5,21 @@ from plone.supermodel import model
 from plone.supermodel.directives import fieldset
 from zope import schema
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
+
+scoring_mode_vocabulary = SimpleVocabulary([
+    SimpleTerm(
+        "rrf",
+        "rrf",
+        "RRF (Reciprocal Rank Fusion) - Combine by rank position",
+    ),
+    SimpleTerm(
+        "score",
+        "score",
+        "Score - Weighted average of normalized scores",
+    ),
+])
 
 
 class IBrowserLayer(IDefaultBrowserLayer):
@@ -46,6 +61,25 @@ class IRerankerSettings(model.Schema):
         default=50,
         min=0,
         max=100,
+    )
+
+    scoring_mode = schema.Choice(
+        title=_(
+            "label_scoring_mode",
+            default="Scoring mode",
+        ),
+        description=_(
+            "help_scoring_mode",
+            default="The method used to combine keyword and vector search "
+            "scores. 'RRF' (Reciprocal Rank Fusion) combines results "
+            "based on rank position, which is robust against score "
+            "scale differences. 'Score' uses weighted average of "
+            "normalized scores. Only effective when vector search "
+            "is enabled.",
+        ),
+        vocabulary=scoring_mode_vocabulary,
+        required=True,
+        default="rrf",
     )
 
     # --- General Pages Group ---
