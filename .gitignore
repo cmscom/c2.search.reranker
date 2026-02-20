@@ -41,7 +41,10 @@ var/
 /reports/
 /sources/
 /venv/
-constraints*.txt
-requirements*.txt
+# mxdev generated
+constraints.txt
+constraints-mxdev.txt
+requirements.txt
+requirements-mxdev.txt
 
 packages/
