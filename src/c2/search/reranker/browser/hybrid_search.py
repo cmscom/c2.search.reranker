@@ -54,7 +54,7 @@ class HybridSearchView(BrowserView):
 
         return self.index()
 
-    def _preparevector_search(self, catalog):
+    def _prepare_vector_search(self, catalog):
         """Prepare and execute vector search if possible.
 
         Returns (vector_results, keyword_ratio) tuple.
@@ -98,7 +98,7 @@ class HybridSearchView(BrowserView):
         keyword_results = keyword_search(catalog, self.search_text)
 
         # Step 2: Vector search (if available and enabled)
-        vector_results, keyword_ratio = self._preparevector_search(catalog)
+        vector_results, keyword_ratio = self._prepare_vector_search(catalog)
 
         self.effective_keyword_ratio = keyword_ratio
         self.effective_vector_ratio = 100 - keyword_ratio

@@ -68,12 +68,20 @@ class RerankerSearchGet(Service):
             query = handler.filter_query(query)
 
         if "SearchableText" in query:
-            query["SearchableText"] = handler.quote_chars(query["SearchableText"])
+            # quote_chars may not exist in older plone.restapi (Plone 5.2)
+            quote_fn = getattr(handler, "quote_chars", None)
+            if quote_fn:
+                query["SearchableText"] = quote_fn(query["SearchableText"])
             if not query["SearchableText"] or query["SearchableText"] == "*":
                 return None, fullobjects
 
-        handler._constrain_query_by_path(query)
-        query = handler._parse_query(query)
+        # These private methods may not exist in older plone.restapi
+        constrain_fn = getattr(handler, "_constrain_query_by_path", None)
+        if constrain_fn:
+            constrain_fn(query)
+        parse_fn = getattr(handler, "_parse_query", None)
+        if parse_fn:
+            query = parse_fn(query)
         return query, fullobjects
 
     def _search_with_reranking(self, query):

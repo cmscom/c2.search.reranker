@@ -6,7 +6,6 @@ from c2.search.reranker import _
 from c2.search.reranker.search import is_reranker_enabled
 from c2.search.reranker.search import search_and_rerank
 from plone.app.contentlisting.interfaces import IContentListing
-from plone.base.batch import Batch
 from Products.CMFPlone.browser.search import AjaxSearch
 from Products.CMFPlone.browser.search import Search
 from Products.CMFPlone.browser.search import SortOption
@@ -14,6 +13,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.i18nmessageid import MessageFactory
+
+try:
+    from plone.base.batch import Batch
+except ImportError:
+    from Products.CMFPlone.PloneBatch import Batch
 
 import Products.CMFPlone.browser
 
