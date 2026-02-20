@@ -41,9 +41,6 @@ jobs:
           - python-version: '3.8'
             plone-version: 'Plone52'
             tox-envs: 'py38-Plone52'
-          - python-version: '3.9'
-            plone-version: 'Plone52'
-            tox-envs: 'py39-Plone52'
           # Plone 6.0 (buildout + pkg_resources)
           - python-version: '3.10'
             plone-version: 'Plone60'
