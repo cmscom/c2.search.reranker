@@ -13,3 +13,15 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: c2.search.reranker\n"
+
+#. Default: "Enable reranker for default search"
+msgid "label_reranker_enabled"
+msgstr "Enable reranker for default search"
+
+#. Default: "If selected, Plone's default search (@search REST API and @@search classic view) will automatically apply content-type boost and time-decay reranking to search results. When disabled, search behaves normally with no performance impact."
+msgid "help_reranker_enabled"
+msgstr "If selected, Plone's default search (@search REST API and @@search classic view) will automatically apply content-type boost and time-decay reranking to search results. When disabled, search behaves normally with no performance impact."
+
+#. Default: "custom algorithm"
+msgid "label_sort_reranker"
+msgstr "custom algorithm"

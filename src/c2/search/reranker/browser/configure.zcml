@@ -20,4 +20,21 @@
       permission="cmf.ManagePortal"
       />
 
+  <!-- Override classic @@search and @@ajax-search with reranking -->
+  <browser:page
+      name="search"
+      for="plone.base.interfaces.INavigationRoot"
+      class=".search_override.RerankedSearch"
+      permission="zope2.View"
+      layer="c2.search.reranker.interfaces.IBrowserLayer"
+      />
+
+  <browser:page
+      name="ajax-search"
+      for="plone.base.interfaces.INavigationRoot"
+      class=".search_override.RerankedAjaxSearch"
+      permission="zope2.View"
+      layer="c2.search.reranker.interfaces.IBrowserLayer"
+      />
+
 </configure>

@@ -4,6 +4,7 @@
 >
 
   <records interface="c2.search.reranker.interfaces.IRerankerSettings">
+    <value key="reranker_enabled">False</value>
     <value key="vector_search_enabled">False</value>
     <value key="keyword_search_ratio">50</value>
     <value key="scoring_mode">rrf</value>
