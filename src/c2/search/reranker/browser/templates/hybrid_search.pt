@@ -10,23 +10,33 @@
 
       <form action=""
             method="GET"
-            tal:attributes="action string:${context/absolute_url}/@@hybrid-search"
+            tal:attributes="
+              action string:${context/absolute_url}/@@hybrid-search;
+            "
       >
         <label for="SearchableText">Search:</label>
         <input id="SearchableText"
                name="SearchableText"
                size="40"
                type="text"
-               tal:attributes="value view/search_text"
+               tal:attributes="
+                 value view/search_text;
+               "
         />
 
         <label for="scoring_mode">Scoring:</label>
-        <select id="scoring_mode" name="scoring_mode">
+        <select id="scoring_mode"
+                name="scoring_mode"
+        >
           <option value="rrf"
-                  tal:attributes="selected python:'selected' if view.scoring_mode == 'rrf' else None"
+                  tal:attributes="
+                    selected python:'selected' if view.scoring_mode == 'rrf' else None;
+                  "
           >RRF (Rank Fusion)</option>
           <option value="score"
-                  tal:attributes="selected python:'selected' if view.scoring_mode == 'score' else None"
+                  tal:attributes="
+                    selected python:'selected' if view.scoring_mode == 'score' else None;
+                  "
           >Score (Weighted)</option>
         </select>
 
@@ -49,7 +59,8 @@
           </li>
           <li>Effective ratio:
             <strong tal:content="view/effective_keyword_ratio"></strong>% keyword
-            / <strong tal:content="view/effective_vector_ratio"></strong>% vector
+            /
+            <strong tal:content="view/effective_vector_ratio"></strong>% vector
           </li>
           <li tal:condition="view/vector_index_name">
             Vector index:
@@ -107,17 +118,22 @@
               <td tal:content="item/rank"></td>
               <td>
                 <a tal:content="item/title"
-                   tal:attributes="href item/url"
+                   tal:attributes="
+                     href item/url;
+                   "
                 ></a>
               </td>
               <td tal:content="item/portal_type"></td>
               <td>
                 <strong tal:condition="python:item['source']=='both'"
-                        tal:content="item/source"></strong>
+                        tal:content="item/source"
+                ></strong>
                 <em tal:condition="python:item['source']=='vector'"
-                    tal:content="item/source"></em>
+                    tal:content="item/source"
+                ></em>
                 <span tal:condition="python:item['source']=='keyword'"
-                      tal:content="item/source"></span>
+                      tal:content="item/source"
+                ></span>
               </td>
               <td style="text-align:right"
                   tal:content="python:item.get('keyword_rrf', '-')"
@@ -165,17 +181,22 @@
               <td tal:content="item/rank"></td>
               <td>
                 <a tal:content="item/title"
-                   tal:attributes="href item/url"
+                   tal:attributes="
+                     href item/url;
+                   "
                 ></a>
               </td>
               <td tal:content="item/portal_type"></td>
               <td>
                 <strong tal:condition="python:item['source']=='both'"
-                        tal:content="item/source"></strong>
+                        tal:content="item/source"
+                ></strong>
                 <em tal:condition="python:item['source']=='vector'"
-                    tal:content="item/source"></em>
+                    tal:content="item/source"
+                ></em>
                 <span tal:condition="python:item['source']=='keyword'"
-                      tal:content="item/source"></span>
+                      tal:content="item/source"
+                ></span>
               </td>
               <td style="text-align:right"
                   tal:content="item/keyword_score"
@@ -201,8 +222,10 @@
 
         <p>
           <strong>Legend:</strong>
-          <strong>both</strong> = found by both |
-          <em>vector</em> = vector only |
+          <strong>both</strong>
+           = found by both |
+          <em>vector</em>
+           = vector only |
           keyword = keyword only
         </p>
       </div>
