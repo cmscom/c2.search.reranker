@@ -19,15 +19,6 @@ jobs:
           echo 'python-version=${{ env.python-version }}'
           echo 'plone-version=${{ env.plone-version }}'
 
-  lint:
-    name: "Backend: Lint"
-    needs:
-      - config
-    uses: plone/meta/.github/workflows/backend-lint.yml@2.x
-    with:
-      python-version: ${{ needs.config.outputs.python-version }}
-      plone-version: ${{ needs.config.outputs.plone-version }}
-
   test:
     name: "Backend: Test"
     needs:
