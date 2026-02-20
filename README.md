@@ -18,31 +18,82 @@ Each group has a configurable half-life (in days). Older content gradually loses
 decay = 0.5 ^ (age_in_days / halflife_days)
 ```
 
-### Combined Scoring
+### Vector Search Integration (Optional)
 
-The final score is calculated as:
-
-```
-final_score = original_score * boost * decay
-```
-
-Where `original_score` is the relevance score from ZCTextIndex.
+When `collective.vectorsearch` is installed, keyword search and vector search (semantic similarity) can be combined. The keyword/vector ratio is configurable (e.g. 50% keyword / 50% vector).
 
 ### Control Panel
 
 All settings are configurable through the Plone control panel (Site Setup > Search Reranker Settings) and the REST API (`@controlpanels/reranker`).
 
-### Vector Search Integration (Planned)
+### Browser Views for Testing
 
-The control panel includes settings for optional vector search integration via `collective.vectorsearch`, with a configurable keyword/vector search ratio. This feature is planned for a future release.
+Two test views are available for debugging and comparing search results:
 
-### Browser View for Testing
-
-A test view is available at `@@reranker-search?SearchableText=keyword` that displays reranked results with detailed score breakdowns (original score, boost, decay, final score).
+- `@@reranker-search?SearchableText=keyword` — Keyword-only reranking with score details
+- `@@hybrid-search?SearchableText=keyword` — Hybrid search (keyword + vector) with all score breakdowns
 
 ### REST API Summary Serializer
 
 Extends plone.restapi listing responses with additional metadata fields: `image_field`, `image_scales`, `effective`, and `Subject`.
+
+## Scoring Algorithm
+
+This addon provides three scoring patterns. In all patterns, **boost** and **decay** are applied as the final step after the base relevance score is calculated.
+
+### Pattern 1: Keyword Only (without vector search)
+
+When vector search is disabled or `collective.vectorsearch` is not installed:
+
+```
+final_score = original_score * boost * decay
+```
+
+- `original_score`: Relevance score from ZCTextIndex (`data_record_normalized_score_`)
+- `boost`: Content type group multiplier (configurable per group, default 1.0)
+- `decay`: Time decay factor `0.5 ^ (age_in_days / halflife_days)` (configurable per group, default halflife 60 days)
+
+### Pattern 2: Hybrid — Score Mode (Weighted Average)
+
+Combines keyword and vector search using normalized scores:
+
+```
+keyword_score  = normalized ZCTextIndex score (0.0 - 1.0)
+vector_score   = cosine similarity from VectorIndex (0.0 - 1.0)
+combined_score = keyword_score * keyword_weight + vector_score * vector_weight
+final_score    = combined_score * boost * decay
+```
+
+- Keyword scores are normalized by dividing by the maximum score in the result set
+- `keyword_weight = keyword_search_ratio / 100` (configurable, default 50%)
+- `vector_weight = 1.0 - keyword_weight`
+- Results found by only one method get 0.0 for the missing score
+
+### Pattern 3: Hybrid — RRF Mode (Reciprocal Rank Fusion) [Default]
+
+Combines keyword and vector search using rank positions instead of raw scores. This is robust against score scale differences between the two search methods.
+
+```
+keyword_rrf    = 1 / (k + keyword_rank)
+vector_rrf     = 1 / (k + vector_rank)
+combined_score = keyword_rrf * keyword_weight + vector_rrf * vector_weight
+final_score    = combined_score * boost * decay
+```
+
+- `k = 60` (constant to prevent top-ranked items from dominating)
+- Ranks are assigned by sorting each result set by its own score (1 = best)
+- Results found by only one method get `rrf = 0.0` for the missing search
+- `keyword_weight` and `vector_weight` are the same as in Score mode
+
+### Scoring Pipeline Summary
+
+```
+Step 1: Execute keyword search (always)
+Step 2: Execute vector search (if enabled and available)
+Step 3: Combine scores (Score mode or RRF mode)
+Step 4: Apply boost * decay to get final_score
+Step 5: Sort by final_score descending
+```
 
 ## Requirements
 
