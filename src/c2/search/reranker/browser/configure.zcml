@@ -43,9 +43,12 @@
   </configure>
 
   <configure zcml:condition="not-installed plone.base">
+    <!-- Plone 5.2: original @@search is registered for
+         plone.app.layout.navigation.interfaces.INavigationRoot,
+         so we must use the same interface to override it. -->
     <browser:page
         name="search"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        for="plone.app.layout.navigation.interfaces.INavigationRoot"
         class=".search_override.RerankedSearch"
         permission="zope2.View"
         layer="c2.search.reranker.interfaces.IBrowserLayer"
@@ -53,7 +56,7 @@
 
     <browser:page
         name="ajax-search"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        for="plone.app.layout.navigation.interfaces.INavigationRoot"
         class=".search_override.RerankedAjaxSearch"
         permission="zope2.View"
         layer="c2.search.reranker.interfaces.IBrowserLayer"
