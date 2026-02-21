@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="c2.search.reranker"
     >
 
@@ -22,45 +21,22 @@
       />
 
   <!-- Override classic @@search and @@ajax-search with reranking.
-       Plone 6+ uses plone.base.interfaces.INavigationRoot;
-       Plone 5.2 falls back to IPloneSiteRoot. -->
-  <configure zcml:condition="installed plone.base">
-    <browser:page
-        name="search"
-        for="plone.base.interfaces.INavigationRoot"
-        class=".search_override.RerankedSearch"
-        permission="zope2.View"
-        layer="c2.search.reranker.interfaces.IBrowserLayer"
-        />
+       Use plone.app.layout INavigationRoot which works on both
+       Plone 5.2 and Plone 6 (deprecated but functional on 6). -->
+  <browser:page
+      name="search"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".search_override.RerankedSearch"
+      permission="zope2.View"
+      layer="c2.search.reranker.interfaces.IBrowserLayer"
+      />
 
-    <browser:page
-        name="ajax-search"
-        for="plone.base.interfaces.INavigationRoot"
-        class=".search_override.RerankedAjaxSearch"
-        permission="zope2.View"
-        layer="c2.search.reranker.interfaces.IBrowserLayer"
-        />
-  </configure>
-
-  <configure zcml:condition="not-installed plone.base">
-    <!-- Plone 5.2: original @@search is registered for
-         plone.app.layout.navigation.interfaces.INavigationRoot,
-         so we must use the same interface to override it. -->
-    <browser:page
-        name="search"
-        for="plone.app.layout.navigation.interfaces.INavigationRoot"
-        class=".search_override.RerankedSearch"
-        permission="zope2.View"
-        layer="c2.search.reranker.interfaces.IBrowserLayer"
-        />
-
-    <browser:page
-        name="ajax-search"
-        for="plone.app.layout.navigation.interfaces.INavigationRoot"
-        class=".search_override.RerankedAjaxSearch"
-        permission="zope2.View"
-        layer="c2.search.reranker.interfaces.IBrowserLayer"
-        />
-  </configure>
+  <browser:page
+      name="ajax-search"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".search_override.RerankedAjaxSearch"
+      permission="zope2.View"
+      layer="c2.search.reranker.interfaces.IBrowserLayer"
+      />
 
 </configure>
