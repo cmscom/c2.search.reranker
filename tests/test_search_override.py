@@ -1,12 +1,14 @@
 """Integration tests for the classic @@search view override with reranking."""
 
 from c2.search.reranker.browser.search_override import RERANKER_SORT_KEY
+from c2.search.reranker.interfaces import IBrowserLayer
 from c2.search.reranker.interfaces import IRerankerSettings
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from zope.interface import alsoProvides
 
 import pytest
 
@@ -19,6 +21,10 @@ class TestRerankedSearchView:
         self.portal = integration["portal"]
         self.request = integration["request"]
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
+        # Ensure IBrowserLayer is marked on the request.
+        # On Plone 5.2, plone.app.testing does not automatically apply
+        # registered browser layers to the test request.
+        alsoProvides(self.request, IBrowserLayer)
 
     def _set_reranker_enabled(self, enabled):
         registry = getUtility(IRegistry)
@@ -156,6 +162,7 @@ class TestRerankedAjaxSearchView:
         self.portal = integration["portal"]
         self.request = integration["request"]
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
+        alsoProvides(self.request, IBrowserLayer)
 
     def test_ajax_search_view_registered(self):
         """The @@ajax-search view should be our override."""
