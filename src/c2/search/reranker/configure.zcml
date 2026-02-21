@@ -19,6 +19,7 @@
   <include package=".browser" />
   <include package=".controlpanels" />
   <include package=".serializers" />
+  <include package=".services" />
 
   <!-- Load collective.vectorsearch if installed -->
   <include

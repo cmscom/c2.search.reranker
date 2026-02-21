@@ -20,4 +20,23 @@
       permission="cmf.ManagePortal"
       />
 
+  <!-- Override classic @@search and @@ajax-search with reranking.
+       Use plone.app.layout INavigationRoot which works on both
+       Plone 5.2 and Plone 6 (deprecated but functional on 6). -->
+  <browser:page
+      name="search"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".search_override.RerankedSearch"
+      permission="zope2.View"
+      layer="c2.search.reranker.interfaces.IBrowserLayer"
+      />
+
+  <browser:page
+      name="ajax-search"
+      for="plone.app.layout.navigation.interfaces.INavigationRoot"
+      class=".search_override.RerankedAjaxSearch"
+      permission="zope2.View"
+      layer="c2.search.reranker.interfaces.IBrowserLayer"
+      />
+
 </configure>

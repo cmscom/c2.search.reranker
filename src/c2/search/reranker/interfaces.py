@@ -31,6 +31,19 @@ class IRerankerSettings(model.Schema):
 
     # --- General Settings (default fieldset) ---
 
+    reranker_enabled = schema.Bool(
+        title=_("label_reranker_enabled", default="Enable reranker for default search"),
+        description=_(
+            "help_reranker_enabled",
+            default="If selected, Plone's default search (@search REST API and "
+            "@@search classic view) will automatically apply content-type "
+            "boost and time-decay reranking to search results. When "
+            "disabled, search behaves normally with no performance impact.",
+        ),
+        required=False,
+        default=False,
+    )
+
     vector_search_enabled = schema.Bool(
         title=_("label_vector_search_enabled", default="Enable vector search"),
         description=_(

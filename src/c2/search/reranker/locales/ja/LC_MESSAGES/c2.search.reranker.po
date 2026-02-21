@@ -14,6 +14,18 @@ msgstr ""
 "Preferred-Encodings: utf-8\n"
 "Domain: c2.search.reranker\n"
 
+#. Default: "Enable reranker for default search"
+msgid "label_reranker_enabled"
+msgstr "デフォルト検索でリランカーを有効にする"
+
+#. Default: "If selected, Plone's default search (@search REST API and @@search classic view) will automatically apply content-type boost and time-decay reranking to search results. When disabled, search behaves normally with no performance impact."
+msgid "help_reranker_enabled"
+msgstr "選択すると、Ploneのデフォルト検索（@search REST APIおよび@@searchクラシックビュー）にコンテンツタイプブーストと時間減衰リランキングが自動的に適用されます。無効の場合、検索はパフォーマンスへの影響なく通常通り動作します。"
+
+#. Default: "custom algorithm"
+msgid "label_sort_reranker"
+msgstr "独自アルゴリズム"
+
 #. Default: "Search Reranker Settings"
 msgid "label_reranker_settings"
 msgstr "検索リランカー設定"
