@@ -9,8 +9,9 @@ try:
 
     _version = tuple(
         int(x)
-        for x in pkg_resources.get_distribution("plone.supermodel")
-        .version.split(".")[:3]
+        for x in pkg_resources.get_distribution("plone.supermodel").version.split(".")[
+            :3
+        ]
     )
     if _version < (1, 7, 0):
         import logging
