@@ -31,6 +31,11 @@ else
 PLONE_VERSION := 6.0.0
 endif
 
+# The venv is always created here, in CI as well. Relying on setup-uv to create
+# it broke when setup-uv v6 stopped auto-activating a venv for python-version.
+# CI passes PYTHON_VERSION (the matrix entry); locally it defaults to 3.10.
+PYTHON_VERSION ?= 3.10
+
 VENV_FOLDER=$(BACKEND_FOLDER)/.venv
 export VIRTUAL_ENV=$(VENV_FOLDER)
 BIN_FOLDER=$(VENV_FOLDER)/bin
@@ -54,9 +59,7 @@ requirements-mxdev.txt: pyproject.toml mx.ini ## Generate constraints file
 
 $(VENV_FOLDER): requirements-mxdev.txt ## Install dependencies
 	@echo "$(GREEN)==> Install environment$(RESET)"
-ifndef CI
-	@uv venv --python=3.10 $(VENV_FOLDER)
-endif
+	@uv venv --python=$(PYTHON_VERSION) $(VENV_FOLDER)
 	@uv pip install -r requirements-mxdev.txt
 
 .PHONY: sync

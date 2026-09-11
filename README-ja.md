@@ -97,8 +97,8 @@ final_score    = combined_score * boost * decay
 
 ## 動作要件
 
-- Python 3.10 - 3.13
-- Plone 6.0 または 6.1
+- Python 3.10 - 3.14
+- Plone 6.0、6.1 または 6.2
 
 ## インストール
 
