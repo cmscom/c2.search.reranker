@@ -3,6 +3,9 @@
 
 name: Plone package (buildout)
 
+# Every action is pinned to a full commit SHA of a release that has been out
+# for at least two weeks (cooldown). The comment after each SHA is the tag.
+
 on:
   push:
     branches: [main]
@@ -17,9 +20,9 @@ jobs:
       matrix:
         python-version: ['3.11']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -61,10 +64,26 @@ jobs:
           - python-version: '3.13'
             plone-version: 'Plone61'
             tox-envs: 'py313-Plone61'
+          # Plone 6.2 (buildout + pkg_resources)
+          - python-version: '3.10'
+            plone-version: 'Plone62'
+            tox-envs: 'py310-Plone62'
+          - python-version: '3.11'
+            plone-version: 'Plone62'
+            tox-envs: 'py311-Plone62'
+          - python-version: '3.12'
+            plone-version: 'Plone62'
+            tox-envs: 'py312-Plone62'
+          - python-version: '3.13'
+            plone-version: 'Plone62'
+            tox-envs: 'py313-Plone62'
+          - python-version: '3.14'
+            plone-version: 'Plone62'
+            tox-envs: 'py314-Plone62'
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ~/.cache/pip
@@ -72,7 +91,7 @@ jobs:
             ~/extends
           key: ${{ runner.os }}-tox-${{ matrix.python-version }}-${{ matrix.plone-version }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('**/requirements*.txt') }}-${{ hashFiles('**/*.cfg') }}-${{ hashFiles('**/constraints*.txt') }}-${{ hashFiles('**/tox.ini') }}
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup buildout cache
@@ -90,7 +109,7 @@ jobs:
         run: |
           tox -r -e ${{ matrix.tox-envs }}
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           fail_ci_if_error: false
         if: matrix.python-version == '3.11'

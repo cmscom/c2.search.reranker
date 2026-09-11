@@ -3,41 +3,89 @@ name: "c2.search.reranker CI"
 on:
   push:
 
-env:
-  python-version: "3.12"
-  plone-version: "6.1-latest"
+# Every action is pinned to a full commit SHA of a release that has been out
+# for at least two weeks (cooldown). The comment after each SHA is the tag.
+#
+# The jobs below used to call plone/meta's reusable workflows
+# (backend-pytest.yml@2.x / backend-pytest-coverage.yml@2.x). Pinning those by
+# SHA would not pin what they call internally (setup_backend_uv@2.x,
+# actions/checkout@v7, astral-sh/setup-uv@vX), so their steps are inlined here.
+
+permissions:
+  contents: read
 
 jobs:
-  config:
-    runs-on: ubuntu-latest
-    outputs:
-      python-version: ${{ env.python-version }}
-      plone-version: ${{ env.plone-version }}
-    steps:
-      - name: Test vars
-        run: |
-          echo 'python-version=${{ env.python-version }}'
-          echo 'plone-version=${{ env.plone-version }}'
-
   test:
-    name: "Backend: Test"
-    needs:
-      - config
-    uses: plone/meta/.github/workflows/backend-pytest.yml@2.x
+    name: "Backend: Test (${{ matrix.python-version }}, ${{ matrix.plone-version }})"
+    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13']
-        plone-version: ['6.1-latest']
-    with:
-      python-version: ${{ matrix.python-version }}
-      plone-version: ${{ matrix.plone-version }}
+        include:
+          - {python-version: '3.10', plone-version: '6.1-latest'}
+          - {python-version: '3.11', plone-version: '6.1-latest'}
+          - {python-version: '3.12', plone-version: '6.1-latest'}
+          - {python-version: '3.13', plone-version: '6.1-latest'}
+          - {python-version: '3.10', plone-version: '6.2-latest'}
+          - {python-version: '3.11', plone-version: '6.2-latest'}
+          - {python-version: '3.12', plone-version: '6.2-latest'}
+          - {python-version: '3.13', plone-version: '6.2-latest'}
+          - {python-version: '3.14', plone-version: '6.2-latest'}
+    env:
+      PYTHON_VERSION: ${{ matrix.python-version }}
+      PLONE_VERSION: ${{ matrix.plone-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache-python: true
+          enable-cache: true
+          cache-dependency-glob: |
+            **/pyproject.toml
+            **/uv.lock
+
+      - name: Install codebase
+        run: make install
+
+      - name: Run tests with pytest
+        run: make test
 
   coverage:
     name: "Backend: Test Coverage"
-    uses: plone/meta/.github/workflows/backend-pytest-coverage.yml@2.x
-    needs:
-      - config
-      - test
-    with:
-      python-version: ${{ needs.config.outputs.python-version }}
-      plone-version: ${{ needs.config.outputs.plone-version }}
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      PYTHON_VERSION: "3.12"
+      PLONE_VERSION: "6.1-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache-python: true
+          enable-cache: true
+          cache-dependency-glob: |
+            **/pyproject.toml
+            **/uv.lock
+
+      - name: Install codebase
+        run: make install
+
+      - name: Run coverage
+        run: make test-coverage
+
+      - name: Report Coverage
+        run: |
+          echo "# Coverage Report" >> "$GITHUB_STEP_SUMMARY"
+          .venv/bin/coverage report --format markdown >> "$GITHUB_STEP_SUMMARY"
