@@ -1,7 +1,14 @@
 name: "c2.search.reranker CI"
 
+# Run on pull requests to main and on main itself (after a merge), like the
+# buildout workflow. Pushing to a branch without a PR does not run the matrix;
+# use workflow_dispatch ("Run workflow") to test a branch without a PR.
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 # Every action is pinned to a full commit SHA of a release that has been out
 # for at least two weeks (cooldown). The comment after each SHA is the tag.
@@ -13,6 +20,12 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded runs of the same PR only. A running main build is never
+  # cancelled (GitHub keeps at most one pending run per group).
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
