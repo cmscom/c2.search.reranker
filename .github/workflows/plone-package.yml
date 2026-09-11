@@ -5,6 +5,11 @@ name: Plone package (buildout)
 
 # Every action is pinned to a full commit SHA of a release that has been out
 # for at least two weeks (cooldown). The comment after each SHA is the tag.
+#
+# Known and not yet addressed (zizmor, pre-existing): no `permissions:` block
+# (default token permissions), and actions/checkout keeps credentials
+# (persist-credentials). Add `permissions: contents: read` and
+# `persist-credentials: false` the next time this file is touched.
 
 on:
   push:

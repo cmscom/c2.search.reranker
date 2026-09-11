@@ -48,7 +48,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: |
             **/pyproject.toml
-            **/uv.lock
+            **/mx.ini
 
       - name: Install codebase
         run: make install
@@ -77,7 +77,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: |
             **/pyproject.toml
-            **/uv.lock
+            **/mx.ini
 
       - name: Install codebase
         run: make install
