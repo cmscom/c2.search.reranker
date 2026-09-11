@@ -97,8 +97,8 @@ Step 5: Sort by final_score descending
 
 ## Requirements
 
-- Python 3.10 - 3.13
-- Plone 6.0 or 6.1
+- Python 3.10 - 3.14
+- Plone 6.0, 6.1 or 6.2
 
 ## Installation
 
