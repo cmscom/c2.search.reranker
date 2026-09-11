@@ -5,17 +5,15 @@ name: Plone package (buildout)
 
 # Every action is pinned to a full commit SHA of a release that has been out
 # for at least two weeks (cooldown). The comment after each SHA is the tag.
-#
-# Known and not yet addressed (zizmor, pre-existing): no `permissions:` block
-# (default token permissions), and actions/checkout keeps credentials
-# (persist-credentials). Add `permissions: contents: read` and
-# `persist-credentials: false` the next time this file is touched.
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   lint:
@@ -26,6 +24,8 @@ jobs:
         python-version: ['3.11']
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -88,6 +88,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |

@@ -1,7 +1,12 @@
 name: "c2.search.reranker CI"
 
+# Run on pull requests to main and on main itself (after a merge), like the
+# buildout workflow. Pushing to a branch without a PR does not run the matrix.
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 # Every action is pinned to a full commit SHA of a release that has been out
 # for at least two weeks (cooldown). The comment after each SHA is the tag.
