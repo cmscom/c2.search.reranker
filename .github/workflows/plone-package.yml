@@ -15,6 +15,12 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded runs of the same PR only. A running main build is never
+  # cancelled (GitHub keeps at most one pending run per group).
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -115,6 +121,9 @@ jobs:
       - name: Test with tox
         run: |
           tox -r -e ${{ matrix.tox-envs }}
+      # Known issue (pre-existing): nothing is uploaded. tox writes
+      # .coverage.<env> but no XML report, so the codecov CLI reports
+      # "No coverage reports found"; fail_ci_if_error: false keeps the job green.
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
