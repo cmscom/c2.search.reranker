@@ -171,8 +171,6 @@ preview = true
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["E501", "RUF001", "S101"]
-"src/c2/__init__.py" = ["SIM105"]
-"src/c2/search/__init__.py" = ["SIM105"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
